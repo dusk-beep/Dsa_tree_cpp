@@ -1,3 +1,2 @@
-This is just for learning git 
-
-
+This is the master branch 
+This is the master branch 
