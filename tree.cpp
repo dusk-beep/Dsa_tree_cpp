@@ -9,11 +9,8 @@ public :
 
 	tree(int val) {
 		data = val;
-		left = right = nullptr;
-	}
-
+		left = right = nullptr; }
 };
-
 //fuction declarations
 int maxdepth(tree* root);
 bool balancedsubtree(tree* root);
