@@ -1,6 +1,8 @@
 // treehaed.cpp
 #include "treehead.h"
-#include <iostream>
+#include <algorithm>
+
+#include <cmath>
 
 tree::tree(int value)
 {
@@ -44,3 +46,4 @@ int maxPathSum(tree* root, int& max)
 	max = std::max(currentSum, max);
 	return root->data + std::max(leftSum, rightSum);
 }
+
