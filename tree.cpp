@@ -1,81 +1,57 @@
+#include "treehead.h"
 #include <iostream>
+/// Function to read the tree recursively
+void readTree(tree* ptr)
+{
+	int data, choice;
 
-class tree {
-public :
+	// Read the data for the current node
+	std::cout << "Enter data for this node: ";
+	std::cin >> ptr->data;
 
-	int data;
-	tree* left;
-	tree* right;
+	// Read if there is a left child
+	std::cout << "Enter left child for " << ptr->data << " (-1 for no child): ";
+	std::cin >> choice;
 
-	tree(int val) {
-		data = val;
-		left = right = nullptr; }
-};
-//fuction declarations
-int maxdepth(tree* root);
-bool balancedsubtree(tree* root);
-int maxPathSum(tree* root,int& max);
+	if (choice != -1) {
+		ptr->left = new tree(choice); // Create left child node with user input value
+		readTree(ptr->left);            // Recursively read left subtree
+	}
 
+	// Read if there is a right child
+	std::cout << "Enter right child for " << ptr->data << " (-1 for no child): ";
+	std::cin >> choice;
 
-//nax depth or height of a binary tree
-int maxdepth(tree* root) {
-	if(root == nullptr)
-		return 0;
-	return 1 + std::max(maxdepth(root->left),maxdepth(root->right));
+	if (choice != -1) {
+		ptr->right = new tree(choice); // Create right child node with user input value
+		readTree(ptr->right);            // Recursively read right subtree
+	}
 }
 
-//check balanced biinary tree
-//ie same height on both subtree
-bool balancedsubtree(tree* root) {
-	if(root == nullptr)
-		return 0;
+// Function to print the tree in a compact, directory-like format
+void printCompactTree(tree* root, const std::string& prefix = "", bool isLeft = true)
+{
+	if (root == nullptr) return;
 
-	int leftHeight = balancedsubtree(root->left);
-	int rightHeight = balancedsubtree(root->right);
+	std::cout << prefix;
+	std::cout << (isLeft ? "├── " : "└── ");
+	std::cout << root->data << std::endl;
 
-	if(std::abs(leftHeight-rightHeight) > 1)
-		return -1;
+	// Recursively print the left and right subtrees
+	std::string leftPrefix = prefix + (isLeft ? "│   " : "    ");
+	std::string rightPrefix = prefix + (isLeft ? "│   " : "    ");
 
-	return 1+ std::max(leftHeight,rightHeight);
+	printCompactTree(root->left, leftPrefix, true);
+	printCompactTree(root->right, rightPrefix, false);
 }
-int maxPathSum(tree* root,int& max) {
-	if(root == nullptr)
-		return 0;
-	//lf leftSum or rightSum returnib negative dont consider  it make it zero
 
-	int leftSum = maxPathSum(root->left,max);
-	int rightSum = maxPathSum(root->right,max);
-	int currentSum = root->data + leftSum + rightSum;
-
-	max = std::max(currentSum,max);
-	return root->data + std::max(leftSum,rightSum);
-}
 //main
 int main()
 {
-	//balanced
-	tree* root = new tree(1);
-	root->left = new tree(2);
-	root->left->left = new tree(4);
-	root->right = new tree(3);
-	root->right->left = new tree(5);
-	root->right->right = new tree(6);
+	tree* root = new tree(0);
+	readTree(root);
 
-	/*
-	unbalanced
-	tree* root = new tree(1);
-	root->left = new tree(2);
-	root->right = new tree(3);
-	root->right->left = new tree(4);
-	root->right->right = new tree(5);
-	root->right->right->right = new tree(6);
-	*/
-	//std::cout<<"max depth : : "<<maxdepth(root);;
-	//std::cout<<std::boolalpha<<"balancedsubtree : "<<balancedsubtree(root);
-
-	// int maxi = -1000;
-	//maxi is int_min and maxi is pass by refeernece so the  maxPathSum will chnage maxi to the maximjum path summ of the tree
-	//maxPathSum(root,maxi);
-	//std::cout<<"max path sum" <<maxi;
-
+	std::cout << std::endl;
+	std::cout << std::endl;
+	printCompactTree(root);
 }
